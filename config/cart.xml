@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mem.xml -->
+<!-- 실행할 SQL문을 정의해 놓은 파일(DAO클래스 역할) -->
+<!-- 주의사항: 종결문자; 생략해야 함 -->
+<mapper namespace="cart">
+
+	<!-- DB에서 가져온 행 값을 객체에 매핑하는 방법을 정의 ResultSet에서 가져와서 DTO에 담고 ArrayList에 추가하는 
+		기능 -->
+	<resultMap type="CartDTO" id="rs">
+		<result column="cartno" property="cartno" />
+		<result column="id" property="id" />
+		<result column="panme" property="panme" />
+		<result column="photo" property="photo" />
+		<result column="color" property="color" />
+		<result column="size" property="size" />
+		<result column="opcode" property="opcode" />
+		<result column="quantity" property="quantity" />
+		<result column="price" property="price" />
+		<result column="totalprice" property="totalprice" />
+		<result column="date" property="date" />
+	</resultMap>
+
+	<!-- ?기호를 대신하는 문법: 파라미터 바인딩 표기법 #{property} -->
+	<!-- 장바구니 넣기 -->
+	<insert id="insertRow" parameterType="cartDTO">
+		INSERT INTO
+		tb_cart()
+		VALUES ()		
+	</insert>
+
+	<!-- s_id로 장바구니 조회해서 정보 가져오기. -->
+	<select id="readCart" parameterType="String" resultMap="rs">
+		SELECT c.*, o.color,o.size,p.pname,p.photo
+		FROM tb_cart AS c
+			 JOIN tb_option  AS o	ON c.opcode = o.opcode
+ 			 JOIN tb_product AS p	ON o.pcode = p.pcode
+ 		WHERE id=#{id}
+		ORDER BY DATE;
+	</select>
+
+	
+
+	<update id="updateRow" parameterType="memDTO"> <!-- jdbc.xml에 typeAliases에 memDTO를 등록해놔서 바로 쓸 수 있다. -->
+		UPDATE mem
+		SET name=#{name}, age=#{age}
+		WHERE num=#{num}
+	</update>
+
+	<!-- int a라는 매개변수 a 선언과 같은 기능 -->
+	<!-- SQL문에서 특수문자 < > /등을 사용해야 하는 경우 <![CDATA[sql문]]> 이렇게 쓰면 된다. -->
+	<delete id="deleteRow" parameterType="int">
+		<![CDATA[
+		DELETE FROM mem
+		WHERE age > #{a}
+		]]>
+	</delete>
+
+	<select id="search" parameterType="String" resultMap="rs">
+		<![CDATA[
+		SELECT num, name, age 
+		FROM mem
+		WHERE name LIKE '%'||#{keyword}||'%'
+		ORDER BY num DESC
+		]]>
+	</select>
+
+	<select id="rowCount" resultType="int">
+		<![CDATA[
+		SELECT count(*) 
+		FROM mem
+		]]>
+	</select>
+	
+	<select id="selectSee" parameterType="int" resultMap="rs">
+		<![CDATA[
+		SELECT num, name, age
+		FROM mem
+		WHERE num = #{num}
+		ORDER BY num DESC
+		]]>
+	</select>
+	
+</mapper>
