@@ -1,5 +1,7 @@
 # ShoppingMall
 
+kimyu08.cafe24.com
+
 솔데스크 팀프로젝트 2인
 
 환경
@@ -9,4 +11,5 @@ JSP
 HTML/CSS
 Boot Strap
 Mybatis
-MariaDB or OracleDB
+MariaDB
+카페24 
