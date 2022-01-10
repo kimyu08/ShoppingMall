@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mem.xml -->
+<!-- 실행할 SQL문을 정의해 놓은 파일(DAO클래스 역할) -->
+<!-- 주의사항: 종결문자; 생략해야 함 -->
+<mapper namespace="page">
+
+	<!-- 현재페이지-1 부터 10개씩 조회 -->
+	<select id="pageSelectAllMem" parameterType="int" resultType="memDTO">
+		SELECT *
+		FROM tb_member
+		LIMIT #{nowRecord},10
+	</select>
+	
+	<!-- 전체 갯수 조회 -->
+	<select id="pageSelectCountMem" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM tb_member
+	</select>
+	
+</mapper>

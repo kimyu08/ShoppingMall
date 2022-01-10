@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- orderCheck.xml -->
+
+<mapper namespace="order">
+
+	<!-- 주문 정보 insert -->
+	<insert id="insertOrder" parameterType="orderDTO">
+	<![CDATA[
+		INSERT INTO tb_order (ono, id,mname,phone, opcode, quantity
+							, totalprice, zipcode, address1, address2)
+		VALUES(
+		(SELECT CONCAT(DATE_FORMAT(NOW(),'%Y%c%d%H%i%s'),COUNT(*)+1) FROM tb_order AS o)
+		,#{id}
+		,#{mname}
+		,#{phone}
+		,(SELECT opcode FROM tb_cart WHERE cartno=#{cartno})
+		,(SELECT quantity FROM tb_cart WHERE cartno=#{cartno})
+		,(SELECT totalprice FROM tb_cart WHERE cartno=#{cartno})
+		,#{zipcode}
+		,#{address1}
+		,#{address2}
+		);	
+	]]>
+	</insert>
+
+	<!-- 주문 정보 확인 -->
+	<select id="checkOrder" parameterType="string" resultMap="rs">
+	<![CDATA[			
+		SELECT o.*,op.color,op.size, p.pname, p.photo
+		FROM tb_order AS o
+	  			JOIN tb_option  AS op ON o.opcode = op.opcode
+	  			JOIN tb_product AS p ON op.pcode = p.pcode
+		WHERE id=#{s_id}
+		ORDER BY dates DESC;
+	]]>
+	</select>
+	
+	<!-- 관리자 주문 정보 확인 -->
+	<select id="MastercheckOrder" resultMap="rs">
+	<![CDATA[			
+		SELECT o.*,op.color,op.size, p.pname, p.photo
+		FROM tb_order AS o
+	  			JOIN tb_option  AS op ON o.opcode = op.opcode
+	  			JOIN tb_product AS p ON op.pcode = p.pcode
+		ORDER BY dates DESC;
+	]]>
+	</select>
+	
+	<!-- 결제 취소된 상품 삭제 -->
+	<select id="deleteOrder" parameterType="string">
+	<![CDATA[			
+		DELETE FROM tb_order
+		WHERE ono=#{ono};
+	]]>
+	</select>
+	
+	<!-- (결제) 취소 -->
+	<select id="updateOrder" parameterType="string">
+	<![CDATA[			
+		UPDATE tb_order
+		SET state=4
+		WHERE ono=#{ono};
+	]]>
+	</select>
+	
+	<!-- 주문 상태 관리 -->
+	<select id="MasterupdateOrder" parameterType="orderDTO">
+	<![CDATA[			
+		UPDATE tb_order
+		SET state=#{state}
+		WHERE ono=#{ono};
+	]]>
+	</select>
+
+
+
+	<resultMap type="orderDTO" id="rs">
+			<result column="ono" property="ono" />
+			<result column="id" property="id" />
+			<result column="photo" property="photo" />
+			<result column="opcode" property="opcode" />
+			<result column="quantity" property="quantity" />
+			<result column="totalprice" property="totalprice" />
+			<result column="dates" property="dates" />
+			<result column="zipcode" property="zipcode" />
+			<result column="address1" property="address1" />
+			<result column="address2" property="address2" />
+			<result column="state" property="state" />
+	</resultMap>
+
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="review">
+
+
+	<select id="selectReview" resultType="reviewDTO">
+		SELECT * FROM tb_review
+		ORDER BY dates DESC;
+	</select>
+	
+	<select id="selectPcodeReview" parameterType="String" resultType="reviewDTO">
+		SELECT * FROM tb_review
+		WHERE pcode=#{pcode}		
+		ORDER BY dates DESC
+	</select>
+
+	<insert id="insertReview" parameterType="reviewDTO">
+		INSERT INTO
+		tb_Review(id, pcode, content )
+		VALUES (#{id}, #{pcode}, #{content})
+	</insert>
+	
+	<!-- 주문 내용 가져오기 -->
+	<select id="getOrder" parameterType="string" resultType="reviewDTO">
+	<![CDATA[			
+		SELECT o.pcode
+		FROM tb_product p JOIN tb_option o ON p.pcode=o.pcode
+						JOIN tb_order od ON o.opcode=od.opcode
+		WHERE od.id=#{id};
+	]]>
+	</select>
+
+
+</mapper>

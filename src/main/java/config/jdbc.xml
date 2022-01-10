@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+  <!-- jdbc.xml -->
+  <!-- DBOpen클래스 + DAO클래스 합쳐놓은거라고 보면됨. -->
+  <!-- 전자정부 프레임워크에 셋팅법이 있음. -->
+  
+<configuration>
+
+	<!-- 클래스에 대한 별칭 부여 -->
+	<typeAliases>
+		<typeAlias type="kr.co.shop.member.MemDTO" alias="memDTO"/>
+		<typeAlias type="kr.co.shop.cart.CartDTO" alias="cartDTO"/>
+		<typeAlias type="kr.co.shop.order.OrderDTO" alias="orderDTO"/>
+		<typeAlias type="kr.co.shop.notice.NoticeDTO" alias="noticeDTO"/>
+		<typeAlias type="kr.co.shop.product.ProductDTO" alias="productDTO"/>
+		<typeAlias type="kr.co.shop.review.ReviewDTO" alias="reviewDTO"/>
+		<typeAlias type="kr.co.shop.page.PageDTO" alias="pageDTO"/>
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<!-- Oracle DB -->
+			<dataSource type="POOLED">
+				<property name="driver" value="org.mariadb.jdbc.Driver" />
+				<property name="url" value="jdbc:mariadb://localhost:3306/shopping" />
+				<property name="username" value="root" />
+				<property name="password" value="1234" />
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<!-- SQL문을 작성해 놓은 XML문서 (DAO클래스 역할) -->
+	<mappers>
+		<mapper resource="config/mem.xml" />
+		<mapper resource="config/cart.xml" />
+		<mapper resource="config/order.xml" />
+		<mapper resource="config/notice.xml" />
+		<mapper resource="config/product.xml" />
+		<mapper resource="config/review.xml" />
+		<mapper resource="config/page.xml" />
+	</mappers>
+</configuration>
+
+
+

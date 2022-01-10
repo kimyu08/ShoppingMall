@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- orderCheck.xml -->
+
+<mapper namespace="pay">
+
+	
+
+
+
+
+	<!-- 주문 정보 확인 -->
+	<select id="payList" parameterType="string" resultMap="rs">
+	<![CDATA[			
+		SELECT o.*,op.color,op.size, p.pname, p.photo
+		FROM tb_order AS o
+	  			JOIN tb_option  AS op ON o.opcode = op.opcode
+	  			JOIN tb_product AS p ON op.pcode = p.pcode
+		WHERE id=#{s_id};
+	]]>
+	</select>
+	
+	
+	
+	
+
+
+
+	<resultMap type="orderDTO" id="rs">
+			<result column="ono" property="ono" />
+			<result column="id" property="id" />
+			<result column="photo" property="photo" />
+			<result column="opcode" property="opcode" />
+			<result column="quantity" property="quantity" />
+			<result column="totalprice" property="totalprice" />
+			<result column="dates" property="dates" />
+			<result column="zipcode" property="zipcode" />
+			<result column="address1" property="address1" />
+			<result column="address2" property="address2" />
+			<result column="state" property="state" />
+	</resultMap>
+	
+	
+
+
+
+</mapper>

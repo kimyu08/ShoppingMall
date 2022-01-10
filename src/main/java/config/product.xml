@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mem.xml -->
+<!-- 실행할 SQL문을 정의해 놓은 파일(DAO클래스 역할) -->
+<!-- 주의사항: 종결문자; 생략해야 함 -->
+<mapper namespace="product">
+
+	<select id="selectAll" resultMap="rs">
+		SELECT *
+		FROM tb_product
+	</select>
+	
+	<select id="selectPgroup" parameterType="String" resultMap="rs">
+		SELECT *
+		FROM tb_product
+		WHERE pgroup=#{pgroup}
+	</select>
+	
+	<select id="searchProduct" parameterType="String" resultMap="rs">
+	<![CDATA[
+		SELECT *
+		FROM tb_product
+		WHERE pname LIKE CONCAT('%',#{search},'%')
+	]]>
+	</select>
+	
+	<select id="countPcode" parameterType="String" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) 
+		FROM tb_product 
+		WHERE pcode=#{pcode}
+	]]>
+	</select>
+	
+	<select id="selectProduct" parameterType="String" resultMap="rs">
+		SELECT *
+		FROM tb_product
+		WHERE pcode=#{pcode}
+	</select>
+	
+	<select id="selectOption" parameterType="String" resultMap="rs">
+		SELECT *
+		FROM tb_option
+		WHERE pcode=#{pcode}
+	</select>
+	
+	<select id="selectColor" parameterType="String" resultMap="rs">
+		SELECT color
+		FROM tb_option
+		WHERE pcode=#{pcode}
+		GROUP BY color		
+	</select>
+	
+	<select id="selectSize" parameterType="productDTO" resultMap="rs">
+		SELECT size,stock
+		FROM tb_option
+		WHERE pcode=#{pcode} AND color=#{color}
+	</select>
+	
+	<select id="MasterSelectProduct" resultType="productDTO">
+		SELECT * FROM tb_product p JOIN tb_option o 
+		ON p.pcode=o.pcode
+		ORDER BY p.pname;
+	</select>
+	
+	<insert id="insertProduct" parameterType="productDTO">
+		INSERT INTO
+		tb_product(pcode, pgroup, pname, photo, content, price, date)
+		VALUES (#{pcode}, #{pgroup}, #{pname}, #{photo}, #{content}, #{ price}, #{date})
+	</insert>
+	
+	<insert id="insertOption" parameterType="productDTO">
+		INSERT INTO
+		tb_option(opcode,pcode, color, size, stock)
+		VALUES (CONCAT(#{pcode}, #{color}, #{size}),#{pcode}, #{color}, #{size}, #{stock})
+	</insert>
+	
+	<insert id="insertOption2" parameterType="productDTO">
+		INSERT INTO
+		tb_option(opcode)
+		VALUES (#{opcode})				
+	</insert>
+	
+	<update id="updateStock" parameterType="cartDTO">
+	<![CDATA[
+		UPDATE tb_option
+		SET stock=stock-#{quantity}
+		WHERE opcode=#{opcode}
+	]]>
+	</update>
+	
+	<resultMap type="productDTO" id="rs">
+		<result column="pcode" property="pcode" />
+		<result column="pgroup" property="pgroup" />
+		<result column="pname" property="pname" />
+		<result column="photo" property="photo" />
+		<result column="content" property="content" />
+		<result column="price" property="price" />
+		<result column="date" property="date" />
+		<result column="opcode" property="opcode" />
+		<result column="color" property="color" />
+		<result column="size" property="size" />
+		<result column="stock" property="stock" />	
+	</resultMap>
+	
+</mapper>
