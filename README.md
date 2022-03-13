@@ -1,6 +1,6 @@
 # ShoppingMall
 
-[쇼핑몰이동](http://kimyu08.cafe24.com)
+[http://kimyu08.cafe24.com](http://kimyu08.cafe24.com)
 
 작업기간: 21.11.29~21.12.29(1개월)
 
